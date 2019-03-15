@@ -6,14 +6,16 @@ import {Label, Table} from "semantic-ui-react";
 
 export default class UsersTable extends React.Component<{}, {
     loading: boolean;
-    users: User[]
+    users: User[],
+    newUser: User
 }> {
 
     private userService: UserService = new UserService();
 
     public state = {
-        loading : false,
-        users: []
+        loading: false,
+        users: [],
+        newUser: {email: '', username: '', password: ''}
     };
 
     public componentDidMount(): void {
@@ -59,7 +61,7 @@ export default class UsersTable extends React.Component<{}, {
                     <Table.HeaderCell>Username:</Table.HeaderCell>
                     <Table.HeaderCell>Email:</Table.HeaderCell>
                     <Table.HeaderCell>Password:</Table.HeaderCell>
-                    <Table.HeaderCell>Delete:</Table.HeaderCell>
+                    <Table.HeaderCell>Action:</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
 
@@ -77,30 +79,79 @@ export default class UsersTable extends React.Component<{}, {
                             <Table.Cell>{user.username}</Table.Cell>
                             <Table.Cell>{user.email}</Table.Cell>
                             <Table.Cell>{user.password}</Table.Cell>
-                            <Table.Cell><button className={"negative ui button"}>Delete</button></Table.Cell>
+                            <Table.Cell><button className={"negative ui button"} onClick={() => this.deleteItem(user.id)}>Delete</button></Table.Cell>
                         </Table.Row>
                     );
                 })}
+                <Table.Row>
+                    <Table.Cell>N/A</Table.Cell>
+                    <Table.Cell><input value={this.state.newUser.username} onChange={this.onChangeUsername.bind(this)}/></Table.Cell>
+                    <Table.Cell><input value={this.state.newUser.email} onChange={this.onChangeEmail.bind(this)}/></Table.Cell>
+                    <Table.Cell><input value={this.state.newUser.password} onChange={this.onChangePassword.bind(this)}/></Table.Cell>
+                    <Table.Cell><button className={"positive ui button"} onClick={() => this.AddItem()}>Add</button></Table.Cell>
+                </Table.Row>
             </Table.Body>
         );
     }
 
-    private renderButtons()
-    {
-        return (
-            <Table.Body>
-                {this.state.users.map(user => {
-                    return (
-                        <Table.Row>
-                            <Table.Cell>{user.id}</Table.Cell>
-                            <Table.Cell>{user.username}</Table.Cell>
-                            <Table.Cell>{user.email}</Table.Cell>
-                            <Table.Cell>{user.password}</Table.Cell>
-                        </Table.Row>
-                    );
-                })}
-            </Table.Body>
-        );
+    private onChangeUsername(event){
+        // this.props or this.state -> bind
+        const newUser = this.state.newUser;
+        newUser.username = event.target.value;
+        this.setState({newUser: newUser})
+    }
+
+    private onChangeEmail(event){
+        // this.props or this.state -> bind
+        const newUser = this.state.newUser;
+        newUser.email = event.target.value;
+        this.setState({newUser: newUser})
+    }
+
+    private onChangePassword(event){
+        // this.props or this.state -> bind
+        const newUser = this.state.newUser;
+        newUser.password = event.target.value;
+        this.setState({newUser: newUser})
+    }
+
+
+    private deleteItem(userId: number){
+        this.userService.deleteUser(userId)
+            .subscribe((user: User) => {
+                // set loading state
+                this.setState({
+                    loading: true,
+                    users: []
+                });
+
+                // load the data
+                this.userService
+                    .getAllUsers()
+                    .subscribe((users: User[]) => {
+                        this.onDataLoaded(users)
+                    });
+            });
+
+    }
+
+    private AddItem(){
+        this.userService.addUser()
+            .subscribe((user: User) => {
+                // set loading state
+                this.setState({
+                    loading: true,
+                    users: []
+                });
+
+                // load the data
+                this.userService
+                    .getAllUsers()
+                    .subscribe((users: User[]) => {
+                        this.onDataLoaded(users)
+                    });
+            });
+
     }
 
 }

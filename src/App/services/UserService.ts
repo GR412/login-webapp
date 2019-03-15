@@ -19,8 +19,13 @@ export class UserService {
     }
 
     // method that calls delete endopoint
-    public deleteUser(userId: number): void {
-         fromPromise(axios.delete(`http://localhost:8080/users/${userId}`))
+    public deleteUser(userId: number): Observable<User> {
+         return fromPromise(axios.delete(`http://localhost:8080/users/${userId}`))
+            .pipe(map(response => response.data));
+    }
+
+    public addUser() : Observable<User> {
+        return fromPromise(axios.post(`http://localhost:8080/users`))
             .pipe(map(response => response.data));
     }
 
