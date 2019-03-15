@@ -4,44 +4,42 @@ import {UserService} from "../../services/UserService";
 import {User} from "../../models/User";
 import {Label, Table} from "semantic-ui-react";
 
-export default class UsersTable extends React.Component<{}, {
+export default class SingleUserDisplay extends React.Component<{userId : number},
+    {
     loading: boolean;
-    users: User[]
+    user: User
 }> {
 
     private userService: UserService = new UserService();
 
     public state = {
-        loading : false,
-        users: []
+        loading : true,
+        user: undefined
     };
 
     public componentDidMount(): void {
-        // set loading state
-        this.setState({
-            loading: true,
-            users: []
-        });
 
-        // load the data
+        // load the data : how to get the path variable
         this.userService
-            .getAllUsers()
-            .subscribe((users: User[]) => {
-                this.onDataLoaded(users)
+            .getUser(this.props.userId)
+            .subscribe((user: User) => {
+                this.onDataLoaded(user)
             });
     }
 
-    public onDataLoaded(users: User[]) {
+    public onDataLoaded(user: User) {
         this.setState({
             loading: false,
-            users: users
+            user: user
         });
     }
 
     public render(): React.ReactNode {
+        if(this.state.loading){
+            return null;
+        }
         return (
             <div className = "table">
-                <p>Loading: {this.state.loading}</p>
                 <Table celled>
                     {this.renderTableHeader()}
                     {this.renderTableBody()}
@@ -59,7 +57,6 @@ export default class UsersTable extends React.Component<{}, {
                     <Table.HeaderCell>Username:</Table.HeaderCell>
                     <Table.HeaderCell>Email:</Table.HeaderCell>
                     <Table.HeaderCell>Password:</Table.HeaderCell>
-                    <Table.HeaderCell>Delete:</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
 
@@ -68,37 +65,17 @@ export default class UsersTable extends React.Component<{}, {
 
     private renderTableBody()
     {
-        return (
-            <Table.Body>
-                {this.state.users.map(user => {
-                    return (
-                        <Table.Row>
-                            <Table.Cell>{user.id}</Table.Cell>
-                            <Table.Cell>{user.username}</Table.Cell>
-                            <Table.Cell>{user.email}</Table.Cell>
-                            <Table.Cell>{user.password}</Table.Cell>
-                            <Table.Cell><button className={"negative ui button"}>Delete</button></Table.Cell>
-                        </Table.Row>
-                    );
-                })}
-            </Table.Body>
-        );
-    }
+        const user : User = this.state.user;
 
-    private renderButtons()
-    {
         return (
             <Table.Body>
-                {this.state.users.map(user => {
-                    return (
+
                         <Table.Row>
                             <Table.Cell>{user.id}</Table.Cell>
                             <Table.Cell>{user.username}</Table.Cell>
                             <Table.Cell>{user.email}</Table.Cell>
                             <Table.Cell>{user.password}</Table.Cell>
                         </Table.Row>
-                    );
-                })}
             </Table.Body>
         );
     }
