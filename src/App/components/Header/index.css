@@ -1,4 +1,11 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
 .header {
-    background-color: grey;
+    background-color: #212121;
     padding: 20px;
 }
+
+h2 {
+    color: white;
+}
+

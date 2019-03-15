@@ -8,7 +8,7 @@ export default class Header extends React.Component {
         return (
             <div className="header">
                 <h2>
-                    <i className="address red large card icon"/>
+                    <i className="user secret green large icon"/>
                     Login WebApp
                 </h2>
             </div>

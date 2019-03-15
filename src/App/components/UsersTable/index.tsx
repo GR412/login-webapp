@@ -40,51 +40,47 @@ export default class UsersTable extends React.Component<{}, {
 
     public render(): React.ReactNode {
         return (
-            <div>
+            <div className = "table">
                 <p>Loading: {this.state.loading}</p>
-                {this.renderUsers()}
                 <Table celled>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell>Header</Table.HeaderCell>
-                            <Table.HeaderCell>Header</Table.HeaderCell>
-                            <Table.HeaderCell>Header</Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-
-                    <Table.Body>
-                        <Table.Row>
-                            <Table.Cell>
-                                <Label ribbon>First</Label>
-                            </Table.Cell>
-                            <Table.Cell>Cell</Table.Cell>
-                            <Table.Cell>Cell</Table.Cell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.Cell>Cell</Table.Cell>
-                            <Table.Cell>Cell</Table.Cell>
-                            <Table.Cell>Cell</Table.Cell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.Cell>Cell</Table.Cell>
-                            <Table.Cell>Cell</Table.Cell>
-                            <Table.Cell>Cell</Table.Cell>
-                        </Table.Row>
-                    </Table.Body>
+                    {this.renderTableHeader()}
+                    {this.renderTableBody()}
                 </Table>
-
-
             </div>
         );
     }
 
+    private renderTableHeader()
+    {
+        return (
+            <Table.Header>
+                <Table.Row>
+                    <Table.HeaderCell>ID:</Table.HeaderCell>
+                    <Table.HeaderCell>Username:</Table.HeaderCell>
+                    <Table.HeaderCell>Email:</Table.HeaderCell>
+                    <Table.HeaderCell>Password:</Table.HeaderCell>
+                </Table.Row>
+            </Table.Header>
 
-    private renderUsers() {
-        if (this.state.loading) {
-            return null;
-        } else {
-            return this.state.users.map(user => <p>{user.email}</p>)
-        }
+        );
+    }
+
+    private renderTableBody()
+    {
+        return (
+            <Table.Body>
+                {this.state.users.map(user => {
+                    return (
+                        <Table.Row>
+                            <Table.Cell>{user.id}</Table.Cell>
+                            <Table.Cell>{user.username}</Table.Cell>
+                            <Table.Cell>{user.email}</Table.Cell>
+                            <Table.Cell>{user.password}</Table.Cell>
+                        </Table.Row>
+                    );
+                })}
+            </Table.Body>
+        );
     }
 
 }
