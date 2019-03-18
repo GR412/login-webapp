@@ -11,7 +11,6 @@ class App extends React.Component {
                 <Header/>
                 <div className="Page-Content">
                     <UsersTable/>
-                    <SingleUserDisplay userId={5}/>
                 </div>
             </div>
         );

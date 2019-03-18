@@ -12,7 +12,7 @@ export class UserService {
         return response;
     }
 
-    public getUser(userId:number): Observable<User> {
+    public getUser(userId: number): Observable<User> {
         const response = fromPromise(axios.get(`http://localhost:8080/users/${userId}`))
             .pipe(map(response => response.data));
         return response;
@@ -24,8 +24,8 @@ export class UserService {
             .pipe(map(response => response.data));
     }
 
-    public addUser() : Observable<User> {
-        return fromPromise(axios.post(`http://localhost:8080/users`))
+    public addUser(user: User) : Observable<User> {
+        return fromPromise(axios.post(`http://localhost:8080/users`, user))
             .pipe(map(response => response.data));
     }
 

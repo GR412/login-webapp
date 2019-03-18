@@ -7,7 +7,8 @@ import {Label, Table} from "semantic-ui-react";
 export default class UsersTable extends React.Component<{}, {
     loading: boolean;
     users: User[],
-    newUser: User
+    newUser: User,
+    updatedUser: User
 }> {
 
     private userService: UserService = new UserService();
@@ -15,7 +16,8 @@ export default class UsersTable extends React.Component<{}, {
     public state = {
         loading: false,
         users: [],
-        newUser: {email: '', username: '', password: ''}
+        newUser: {email: '', username: '', password: ''},
+        updatedUser: {email: '', username: '', password: ''}
     };
 
     public componentDidMount(): void {
@@ -72,9 +74,9 @@ export default class UsersTable extends React.Component<{}, {
     {
         return (
             <Table.Body>
-                {this.state.users.map(user => {
+                {this.state.users.map((user, index) => {
                     return (
-                        <Table.Row>
+                        <Table.Row key={`user-details-${index}`}>
                             <Table.Cell>{user.id}</Table.Cell>
                             <Table.Cell>{user.username}</Table.Cell>
                             <Table.Cell>{user.email}</Table.Cell>
@@ -88,7 +90,7 @@ export default class UsersTable extends React.Component<{}, {
                     <Table.Cell><input value={this.state.newUser.username} onChange={this.onChangeUsername.bind(this)}/></Table.Cell>
                     <Table.Cell><input value={this.state.newUser.email} onChange={this.onChangeEmail.bind(this)}/></Table.Cell>
                     <Table.Cell><input value={this.state.newUser.password} onChange={this.onChangePassword.bind(this)}/></Table.Cell>
-                    <Table.Cell><button className={"positive ui button"} onClick={() => this.AddItem()}>Add</button></Table.Cell>
+                    <Table.Cell><button className={"positive ui button"} onClick={() => this.AddItem(this.state.newUser)}>Add</button></Table.Cell>
                 </Table.Row>
             </Table.Body>
         );
@@ -135,8 +137,8 @@ export default class UsersTable extends React.Component<{}, {
 
     }
 
-    private AddItem(){
-        this.userService.addUser()
+    private AddItem(userToAdd: User){
+        this.userService.addUser(userToAdd)
             .subscribe((user: User) => {
                 // set loading state
                 this.setState({
