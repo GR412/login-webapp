@@ -24,7 +24,7 @@ export class UserService {
             .pipe(map(response => response.data));
     }
 
-    public addUser(user: User) : Observable<User> {
+    public addUser(user: User) : Observable<User>  {
         return fromPromise(axios.post(`http://localhost:8080/users`, user))
             .pipe(map(response => response.data));
     }
