@@ -81,7 +81,10 @@ export default class UsersTable extends React.Component<{}, {
                             <Table.Cell>{user.username}</Table.Cell>
                             <Table.Cell>{user.email}</Table.Cell>
                             <Table.Cell>{user.password}</Table.Cell>
-                            <Table.Cell><button className={"negative ui button"} onClick={() => this.deleteItem(user.id)}>Delete</button></Table.Cell>
+                            <Table.Cell>
+                                <button className={"negative ui button"} onClick={() => this.deleteItem(user.id)}>Delete</button>
+                                <button className={"ui orange button"} onClick={() => this.deleteItem(user.id)}>Modify</button>
+                            </Table.Cell>
                         </Table.Row>
                     );
                 })}
@@ -127,33 +130,33 @@ export default class UsersTable extends React.Component<{}, {
                     users: []
                 });
 
-                // load the data
-                this.userService
-                    .getAllUsers()
-                    .subscribe((users: User[]) => {
-                        this.onDataLoaded(users)
-                    });
+// load the data
+this.userService
+    .getAllUsers()
+    .subscribe((users: User[]) => {
+        this.onDataLoaded(users)
+    });
+});
+
+}
+
+private AddItem(userToAdd: User){
+    this.userService.addUser(userToAdd)
+        .subscribe((user: User) => {
+            // set loading state
+            this.setState({
+                loading: true,
+                users: []
             });
 
-    }
-
-    private AddItem(userToAdd: User){
-        this.userService.addUser(userToAdd)
-            .subscribe((user: User) => {
-                // set loading state
-                this.setState({
-                    loading: true,
-                    users: []
+            // load the data
+            this.userService
+                .getAllUsers()
+                .subscribe((users: User[]) => {
+                    this.onDataLoaded(users)
                 });
+        });
 
-                // load the data
-                this.userService
-                    .getAllUsers()
-                    .subscribe((users: User[]) => {
-                        this.onDataLoaded(users)
-                    });
-            });
-
-    }
+}
 
 }

@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import './App.css';
 import UsersTable from "./components/UsersTable";
 import SingleUserDisplay from "./components/SingleUserDisplay";
+import UpdateUserForm from "./components/UpdateUserForm";
 
 class App extends React.Component {
     public render() {
@@ -11,6 +12,7 @@ class App extends React.Component {
                 <Header/>
                 <div className="Page-Content">
                     <UsersTable/>
+                    <UpdateUserForm/>
                 </div>
             </div>
         );
