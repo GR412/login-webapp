@@ -2,7 +2,7 @@ import * as React from "react";
 import "./index.css";
 import {UserService} from "../../services/UserService";
 import {User} from "../../models/User";
-//import {Form, Table} from "semantic-ui-react";
+import {Form, Checkbox, Button} from "semantic-ui-react";
 
 export default class UpdateUserForm extends React.Component<{}, {
     loading: boolean;
@@ -39,34 +39,33 @@ export default class UpdateUserForm extends React.Component<{}, {
 
     public render(): React.ReactNode {
         return (
-            <div className = "table">
-                <p>Loading: {this.state.loading}</p>
-                {this.renderTableHeader()}
-            </div>
+            <div className= "main">
+                    {this.renderUserUpdateForm()}
+             </div>
         );
     }
 
-    private renderTableHeader()
+    private renderUserUpdateForm()
     {
         return (
-
-            <form className="ui form">
-                <div className="field">
-                    <label>First Name</label>
-                    <input type="text" name="first-name" placeholder="First Name" />
-                </div>
-                <div className="field">
-                    <label>Last Name</label>
-                    <input type="text" name="last-name" placeholder="Last Name" />
-                </div>
-                <div className="field">
-                    <div className="ui checkbox">
-                        <input type="checkbox" tabIndex={0} className="hidden" />
-                        <label>I agree to the Terms and Conditions</label>
-                    </div>
-                </div>
-                <button className="ui button" type="submit">Submit</button>
-            </form>
+            <Form>
+                <Form.Field>
+                    <label>Username:</label>
+                    <input placeholder='Username' />
+                </Form.Field>
+                <Form.Field>
+                    <label>Email:</label>
+                    <input placeholder='Email' />
+                </Form.Field>
+                <Form.Field>
+                    <label>Password:</label>
+                    <input placeholder='Password' />
+                </Form.Field>
+                <Form.Field>
+                    <Checkbox label='I agree to the Terms and Conditions' />
+                </Form.Field>
+                <Button type='submit'>Submit</Button>
+            </Form>
 
         );
     }

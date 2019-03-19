@@ -11,8 +11,12 @@ class App extends React.Component {
             <div className="App">
                 <Header/>
                 <div className="Page-Content">
-                    <UsersTable/>
-                    <UpdateUserForm/>
+                    <div className= "wrapper">
+                        <div className = "title-banner"><h3>User Table</h3></div>
+                            <UsersTable/>
+                        <div className = "title-banner"><h3>User Update Form</h3></div>
+                            <UpdateUserForm/>
+                    </div>
                 </div>
             </div>
         );

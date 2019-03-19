@@ -44,13 +44,12 @@ export default class UsersTable extends React.Component<{}, {
 
     public render(): React.ReactNode {
         return (
-            <div className = "table">
-                <p>Loading: {this.state.loading}</p>
-                <Table celled>
-                    {this.renderTableHeader()}
-                    {this.renderTableBody()}
-                </Table>
-            </div>
+                <div className = "main">
+                    <Table celled>
+                        {this.renderTableHeader()}
+                        {this.renderTableBody()}
+                    </Table>
+                </div>
         );
     }
 
