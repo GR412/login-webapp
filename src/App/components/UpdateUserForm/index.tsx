@@ -13,7 +13,6 @@ export default class UpdateUserForm extends React.Component<{}, {
     public state = {
         loading: false,
         users: [],
-        newUser: {email: '', username: '', password: ''},
         updatedUser: {email: '', username: '', password: ''}
     };
 
@@ -51,7 +50,7 @@ export default class UpdateUserForm extends React.Component<{}, {
             <Form>
                 <Form.Field>
                     <label>Username:</label>
-                    <input placeholder='Username' />
+                    <input placeholder='Username'  className="input"/>
                 </Form.Field>
                 <Form.Field>
                     <label>Email:</label>
@@ -61,10 +60,7 @@ export default class UpdateUserForm extends React.Component<{}, {
                     <label>Password:</label>
                     <input placeholder='Password' />
                 </Form.Field>
-                <Form.Field>
-                    <Checkbox label='I agree to the Terms and Conditions' />
-                </Form.Field>
-                <Button type='submit'>Submit</Button>
+                <Button className={"primary ui button"} type='submit'>Submit</Button>
             </Form>
 
         );
