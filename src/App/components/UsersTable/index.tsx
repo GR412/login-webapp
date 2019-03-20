@@ -1,19 +1,20 @@
-import * as React from "react";
+import * as React from "react"; //Import the react framework.
 import "./index.css";
-import {UserService} from "../../services/UserService";
-import {User} from "../../models/User";
-import {Form, Checkbox, Button, Table} from "semantic-ui-react";
+import {UserService} from "../../services/UserService"; //Import the UserService class so it's methods can be accessed.
+import {User} from "../../models/User"; //Import the User object so it can be used in this component.
+import {Form, Button, Table} from "semantic-ui-react"; //Import various semantic-ui-react elements so they can be used.
 
+//The UsersTable class extends React.Component in order to be react component.
 export default class UsersTable extends React.Component<{}, {
 
-  //define the state and their types
-    loading: boolean;
-    users: User[],
-    newUser: User,
-    updatedUser: User
+  //Define the state and their types.
+    loading: boolean; //Determines if a page is currently loading or has loaded.
+    users: User[], //This will hold an Array of User objects that will be extracted from the backend database.
+    newUser: User, //This will be used to store user details when creating a new user.
+    updatedUser: User //This will be used to store user details when updating an existing user.
 }> {
 
-    //create a variable to access the UserService class
+    //A variable that will be assigned to an instance of the UserService class
     private userService: UserService = new UserService();
 
     //set the initial state
@@ -24,15 +25,19 @@ export default class UsersTable extends React.Component<{}, {
         updatedUser: {id: 0, email: '', username: '', password: ''}
     };
 
-    //runs before the page is rendered
-    public componentDidMount(): void {
-        //first set the state that needs to be set
+    //This is a special react method that runs before the page is rendered it sets the state and extracts / loads data.
+    public componentDidMount(): void
+    {
+        //First set the state that needs to be set.
         this.setState({
-            loading: true, //loading state should be set to true as loading commences before the page is rendered
-            users: [] //user list should be empty before rendering
+            loading: true, //the loading state should be set to true as loading commences before the page is rendered.
+            users: [] //The user list should be reset to an empty array before rendering so fresh data can be extracted.
         });
 
-        // load the data
+        /**
+         * We extract all of the users from the backend database with the UserService and assign each to a new users
+         * array and then call the onDataLoaded method in which we supply the new users array.
+         */
         this.userService
             .getAllUsers()
             .subscribe((users: User[]) => {
@@ -40,14 +45,28 @@ export default class UsersTable extends React.Component<{}, {
             });
     }
 
-    public onDataLoaded(users: User[]) {
+    //Updates the state, ready for the page to be rendered to the user.
+    public onDataLoaded(users: User[])
+    {
         this.setState({
-            loading: false,
-            users: users
+            loading: false, //After the data has extracted and loaded the loading state can be set to false.
+            users: users //The users state can now be assigned to an array of users ready to be displayed to the user.
         });
     }
 
-    public render(): React.ReactNode {
+    /**
+     * Special React method that renders the actual HTML content, once the componentDidMount has set the state and
+     * extracted / loaded the data from the backend api.
+     *
+     * A celled semantic-ui-react table is created which contains calls to two methods that render the header
+     * and body of the table.
+     *
+     * Underneath a call to another method which renders a semantic-ui-react form is made.
+     *
+     * @return a semantic-ui-react table and form
+     */
+    public render(): React.ReactNode
+    {
         return (
             <div className="main">
                 <Table celled>
@@ -59,6 +78,15 @@ export default class UsersTable extends React.Component<{}, {
         );
     }
 
+    /*------------------------------------------------------------------METHODS THAT GENERATE HTML---------------------------------------------------------*/
+
+    /**
+     * Method returns a table header consisting of 5 headers.
+     *
+     * This is a special react-semantic ui table that has predetermined css styles.
+     *
+     * @return a semantic-ui-react table header
+     */
     private renderTableHeader() {
         return (
             <Table.Header>
@@ -74,6 +102,11 @@ export default class UsersTable extends React.Component<{}, {
         );
     }
 
+    /**
+     * Method returns the contents of the table.
+     *
+     * NEEDS AN EXPLANATION
+     */
     private renderTableBody() {
         return (
             <Table.Body>
@@ -86,7 +119,7 @@ export default class UsersTable extends React.Component<{}, {
                             <Table.Cell>{user.password}</Table.Cell>
                             <Table.Cell>
                                 <button className={"negative ui button"}
-                                        onClick={() => this.deleteItem(user.id)}>Delete
+                                        onClick={() => this.deleteUser(user.id)}>Delete
                                 </button>
                                 <button className={"ui orange button"} onClick={() => this.populateForm(user)}>Modify
                                 </button>
@@ -103,7 +136,7 @@ export default class UsersTable extends React.Component<{}, {
                     <Table.Cell><input value={this.state.newUser.password}
                                        onChange={this.captureNewPassword.bind(this)}/></Table.Cell>
                     <Table.Cell>
-                        <button className={"positive ui button"} onClick={() => this.AddItem(this.state.newUser)}>Add
+                        <button className={"positive ui button"} onClick={() => this.addUser(this.state.newUser)}>Add
                         </button>
                     </Table.Cell>
                 </Table.Row>
@@ -111,6 +144,19 @@ export default class UsersTable extends React.Component<{}, {
         );
     }
 
+    /**
+     * Method returns a semantic-ui-react form.
+     *
+     * Each input field will have an initial value of the updatedUser state captured from the user table when
+     * the modify button is pressed.
+     *
+     * The onChange method for each input maps to an external function that captures the new input to update
+     * the updatedUser state.
+     *
+     * The submit button calls the updateUser method provided with the new updatedUser state.
+     *
+     * @return a semantic-ui-react form with pre-populated input fields based on data from the user table.
+     */
     private renderUserUpdateForm() {
         return (
             <Form>
@@ -135,6 +181,24 @@ export default class UsersTable extends React.Component<{}, {
         );
     }
 
+    /*------------------------------------------------------------------METHODS THAT CAPTURE INPUT FOR onChange---------------------------------------------------------*/
+
+
+    /*-----METHODS THAT CAPTURE INPUT TO CREATE A NEW USER-----*/
+
+
+    /**
+     * Methods that capture data from an onChange event.
+     *
+     * @param event holds the data that is being typed into the input field.
+     *
+     * Variable newUser is defined and assigned to the current state of newUser.
+     *
+     * The newUser object properties are assigned to the corresponding onChange event which holds user input data.
+     *
+     * Finally the state of the newUser is updated to the newUser variable that holds the event data.
+     *
+     */
     private captureNewUsername(event) {
         // this.props or this.state -> bind
         const newUser = this.state.newUser;
@@ -156,6 +220,8 @@ export default class UsersTable extends React.Component<{}, {
         this.setState({newUser: newUser})
     }
 
+    /*-----METHODS THAT CAPTURE INPUT TO UPDATE AN EXISTING USER-----*/
+
     private captureUpdatedUsername(event) {
         const updatedUser = this.state.updatedUser;
         updatedUser.username = event.target.value;
@@ -175,8 +241,29 @@ export default class UsersTable extends React.Component<{}, {
         this.setState({updatedUser: updatedUser})
     }
 
+    /*------------------------------------------------------------------METHODS THAT CAPTURE INPUT FOR onClick---------------------------------------------------------*/
 
-    private deleteItem(userId: number) {
+    /**
+     * Method that populates the update user form with data captured from the users table when the modify button is
+     * pressed.
+     *
+     * @param user is the supplied user data captured from the user table.
+     *
+     * Each detail of the supplied user parameter (id, username, email and password) is assigned to the updatedUser
+     * variable. Then we assign the updatedUser state with the updatedUser variable which holds the supplied user data.
+     */
+
+    private populateForm(user: User) {
+        const updatedUser = this.state.updatedUser; //Variable that is assigned to the current state of the updatedUser
+        updatedUser.id = user.id;
+        updatedUser.username = user.username;
+        updatedUser.email = user.email;
+        updatedUser.password = user.password;
+        this.setState({updatedUser: updatedUser});
+
+    }
+
+    private deleteUser(userId: number) {
         this.userService.deleteUser(userId)
             .subscribe((user: User) => {
                 // set loading state
@@ -195,7 +282,7 @@ export default class UsersTable extends React.Component<{}, {
 
     }
 
-    private AddItem(userToAdd: User) {
+    private addUser(userToAdd: User) {
         this.userService.addUser(userToAdd)
             .subscribe((user: User) => {
                 // set loading state
@@ -229,19 +316,6 @@ export default class UsersTable extends React.Component<{}, {
                     this.onDataLoaded(users)
 
                 });
-
             });
-
     }
-
-    private populateForm(user: User) {
-        const updatedUser = this.state.updatedUser;
-        updatedUser.id = user.id;
-        updatedUser.username = user.username;
-        updatedUser.email = user.email;
-        updatedUser.password = user.password;
-        this.setState({updatedUser: updatedUser});
-
-    }
-
 }
