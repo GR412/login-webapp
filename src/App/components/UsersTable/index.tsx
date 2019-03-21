@@ -2,16 +2,16 @@ import * as React from "react"; //Import the react framework.
 import "./index.css";
 import {UserService} from "../../services/UserService"; //Import the UserService class so it's methods can be accessed.
 import {User} from "../../models/User"; //Import the User object so it can be used in this component.
-import {Form, Button, Table} from "semantic-ui-react"; //Import various semantic-ui-react elements so they can be used.
+import {Table} from "semantic-ui-react";
+import {Link} from "react-router-dom";
 
 //The UsersTable class extends React.Component in order to be react component.
 export default class UsersTable extends React.Component<{}, {
 
-  //Define the state and their types.
+    //Define the state and their types.
     loading: boolean; //Determines if a page is currently loading or has loaded.
     users: User[], //This will hold an Array of User objects that will be extracted from the backend database.
-    newUser: User, //This will be used to store user details when creating a new user.
-    updatedUser: User //This will be used to store user details when updating an existing user.
+
 }> {
 
     //A variable that will be assigned to an instance of the UserService class
@@ -21,13 +21,10 @@ export default class UsersTable extends React.Component<{}, {
     public state = {
         loading: false,
         users: [],
-        newUser: {email: '', username: '', password: ''},
-        updatedUser: {id: 0, email: '', username: '', password: ''}
     };
 
     //This is a special react method that runs before the page is rendered it sets the state and extracts / loads data.
-    public componentDidMount(): void
-    {
+    public componentDidMount(): void {
         //First set the state that needs to be set.
         this.setState({
             loading: true, //the loading state should be set to true as loading commences before the page is rendered.
@@ -36,18 +33,15 @@ export default class UsersTable extends React.Component<{}, {
 
         /**
          * We extract all of the users from the backend database with the UserService and assign each to a new users
-         * array and then call the onDataLoaded method in which we supply the new users array.
+         * array and then call the onUsersLoaded method in which we supply the new users array.
          */
         this.userService
             .getAllUsers()
-            .subscribe((users: User[]) => {
-                this.onDataLoaded(users)
-            });
+            .subscribe((users: User[]) => this.onUsersLoaded(users));
     }
 
     //Updates the state, ready for the page to be rendered to the user.
-    public onDataLoaded(users: User[])
-    {
+    public onUsersLoaded(users: User[]) {
         this.setState({
             loading: false, //After the data has extracted and loaded the loading state can be set to false.
             users: users //The users state can now be assigned to an array of users ready to be displayed to the user.
@@ -65,20 +59,16 @@ export default class UsersTable extends React.Component<{}, {
      *
      * @return a semantic-ui-react table and form
      */
-    public render(): React.ReactNode
-    {
+    public render(): React.ReactNode {
         return (
             <div className="main">
                 <Table celled>
                     {this.renderTableHeader()}
                     {this.renderTableBody()}
                 </Table>
-                {this.renderUserUpdateForm()}
             </div>
         );
     }
-
-    /*------------------------------------------------------------------METHODS THAT GENERATE HTML---------------------------------------------------------*/
 
     /**
      * Method returns a table header consisting of 5 headers.
@@ -121,125 +111,18 @@ export default class UsersTable extends React.Component<{}, {
                                 <button className={"negative ui button"}
                                         onClick={() => this.deleteUser(user.id)}>Delete
                                 </button>
-                                <button className={"ui orange button"} onClick={() => this.populateForm(user)}>Modify
-                                </button>
+                                <Link to={`/update-user/${user.id}`}>
+                                    <button className={"ui orange button"}>Modify</button>
+                                </Link>
                             </Table.Cell>
                         </Table.Row>
                     );
                 })}
-                <Table.Row>
-                    <Table.Cell>N/A</Table.Cell>
-                    <Table.Cell><input value={this.state.newUser.username}
-                                       onChange={this.captureNewUsername.bind(this)}/></Table.Cell>
-                    <Table.Cell><input value={this.state.newUser.email}
-                                       onChange={this.captureNewEmail.bind(this)}/></Table.Cell>
-                    <Table.Cell><input value={this.state.newUser.password}
-                                       onChange={this.captureNewPassword.bind(this)}/></Table.Cell>
-                    <Table.Cell>
-                        <button className={"positive ui button"} onClick={() => this.addUser(this.state.newUser)}>Add
-                        </button>
-                    </Table.Cell>
-                </Table.Row>
             </Table.Body>
         );
     }
 
-    /**
-     * Method returns a semantic-ui-react form.
-     *
-     * Each input field will have an initial value of the updatedUser state captured from the user table when
-     * the modify button is pressed.
-     *
-     * The onChange method for each input maps to an external function that captures the new input to update
-     * the updatedUser state.
-     *
-     * The submit button calls the updateUser method provided with the new updatedUser state.
-     *
-     * @return a semantic-ui-react form with pre-populated input fields based on data from the user table.
-     */
-    private renderUserUpdateForm() {
-        return (
-            <Form>
-                <Form.Field>
-                    <label>Username:</label>
-                    <input placeholder='Username' value={this.state.updatedUser.username}
-                           onChange={this.captureUpdatedUsername.bind(this)}/>
-                </Form.Field>
-                <Form.Field>
-                    <label>Email:</label>
-                    <input placeholder='Email' value={this.state.updatedUser.email}
-                           onChange={this.captureUpdatedEmail.bind(this)}/>
-                </Form.Field>
-                <Form.Field>
-                    <label>Password:</label>
-                    <input placeholder='Password' value={this.state.updatedUser.password}
-                           onChange={this.captureUpdatedPassword.bind(this)}/>
-                </Form.Field>
-                <Button className={"primary ui button"} type='submit' onClick={() => this.updateUser(this.state.updatedUser)}>Submit</Button>
-            </Form>
 
-        );
-    }
-
-    /*------------------------------------------------------------------METHODS THAT CAPTURE INPUT FOR onChange---------------------------------------------------------*/
-
-
-    /*-----METHODS THAT CAPTURE INPUT TO CREATE A NEW USER-----*/
-
-
-    /**
-     * Methods that capture data from an onChange event.
-     *
-     * @param event holds the data that is being typed into the input field.
-     *
-     * Variable newUser is defined and assigned to the current state of newUser.
-     *
-     * The newUser object properties are assigned to the corresponding onChange event which holds user input data.
-     *
-     * Finally the state of the newUser is updated to the newUser variable that holds the event data.
-     *
-     */
-    private captureNewUsername(event) {
-        // this.props or this.state -> bind
-        const newUser = this.state.newUser;
-        newUser.username = event.target.value;
-        this.setState({newUser: newUser})
-    }
-
-    private captureNewEmail(event) {
-        // this.props or this.state -> bind
-        const newUser = this.state.newUser;
-        newUser.email = event.target.value;
-        this.setState({newUser: newUser})
-    }
-
-    private captureNewPassword(event) {
-        // this.props or this.state -> bind
-        const newUser = this.state.newUser;
-        newUser.password = event.target.value;
-        this.setState({newUser: newUser})
-    }
-
-    /*-----METHODS THAT CAPTURE INPUT TO UPDATE AN EXISTING USER-----*/
-
-    private captureUpdatedUsername(event) {
-        const updatedUser = this.state.updatedUser;
-        updatedUser.username = event.target.value;
-        this.setState({updatedUser: updatedUser})
-    }
-
-    private captureUpdatedEmail(event) {
-        const updatedUser = this.state.updatedUser;
-        updatedUser.email = event.target.value;
-        this.setState({updatedUser: updatedUser})
-
-    }
-
-    private captureUpdatedPassword(event) {
-        const updatedUser = this.state.updatedUser;
-        updatedUser.password = event.target.value;
-        this.setState({updatedUser: updatedUser})
-    }
 
     /*------------------------------------------------------------------METHODS THAT CAPTURE INPUT FOR onClick---------------------------------------------------------*/
 
@@ -253,7 +136,7 @@ export default class UsersTable extends React.Component<{}, {
      * variable. Then we assign the updatedUser state with the updatedUser variable which holds the supplied user data.
      */
 
-    private populateForm(user: User) {
+    /*private populateForm(user: User) {
         const updatedUser = this.state.updatedUser; //Variable that is assigned to the current state of the updatedUser
         updatedUser.id = user.id;
         updatedUser.username = user.username;
@@ -261,48 +144,33 @@ export default class UsersTable extends React.Component<{}, {
         updatedUser.password = user.password;
         this.setState({updatedUser: updatedUser});
 
+    }*/
+
+    private linkToUpdatePage() {
+        <Link to="/update-user"></Link>
     }
 
     private deleteUser(userId: number) {
-        this.userService.deleteUser(userId)
-            .subscribe((user: User) => {
-                // set loading state
-                this.setState({
-                    loading: true,
-                    users: []
-                });
-
-                // load the data
-                this.userService
-                    .getAllUsers()
-                    .subscribe((users: User[]) => {
-                        this.onDataLoaded(users)
-                    });
-            });
+        this.userService
+            .deleteUser(userId)
+            .subscribe((user: User) => this.onUserLoaded(user));
 
     }
 
-    private addUser(userToAdd: User) {
-        this.userService.addUser(userToAdd)
-            .subscribe((user: User) => {
-                // set loading state
-                this.setState({
-                    loading: true,
-                    users: []
-                });
+    private onUserLoaded(user: User) {
+        // set loading state
+        this.setState({
+            loading: true,
+            users: []
+        });
 
-                // load the data
-                this.userService
-                    .getAllUsers()
-                    .subscribe((users: User[]) => {
-                        this.onDataLoaded(users)
-                    });
-            });
-
+        // load the data
+        this.userService
+            .getAllUsers()
+            .subscribe((users: User[]) => this.onUsersLoaded(users));
     }
 
-    private updateUser(userToUpdate: User)
-    {
+    private updateUser(userToUpdate: User) {
         this.userService.updateUser(userToUpdate)
             .subscribe((user: User) => {
                 this.setState({
@@ -313,9 +181,10 @@ export default class UsersTable extends React.Component<{}, {
                 this.userService
                     .getAllUsers()
                     .subscribe((users: User[]) => {
-                    this.onDataLoaded(users)
+                        this.onUsersLoaded(users)
 
-                });
+                    });
             });
     }
+
 }
