@@ -4,6 +4,7 @@ import {UserService} from "../../services/UserService"; //Import the UserService
 import {User} from "../../models/User"; //Import the User object so it can be used in this component.
 import {Table} from "semantic-ui-react";
 import {Link} from "react-router-dom";
+import UpdateUserPage from "../../pages/update-user-page";
 
 //The UsersTable class extends React.Component in order to be react component.
 export default class UsersTable extends React.Component<{}, {
@@ -112,7 +113,8 @@ export default class UsersTable extends React.Component<{}, {
                                         onClick={() => this.deleteUser(user.id)}>Delete
                                 </button>
                                 <Link to={`/update-user/${user.id}`}>
-                                    <button className={"ui orange button"}>Modify</button>
+                                    <button className={"ui orange button"} onClick={() => <UpdateUserPage user={user}/>}
+                                    >View More</button>
                                 </Link>
                             </Table.Cell>
                         </Table.Row>
@@ -135,20 +137,6 @@ export default class UsersTable extends React.Component<{}, {
      * Each detail of the supplied user parameter (id, username, email and password) is assigned to the updatedUser
      * variable. Then we assign the updatedUser state with the updatedUser variable which holds the supplied user data.
      */
-
-    /*private populateForm(user: User) {
-        const updatedUser = this.state.updatedUser; //Variable that is assigned to the current state of the updatedUser
-        updatedUser.id = user.id;
-        updatedUser.username = user.username;
-        updatedUser.email = user.email;
-        updatedUser.password = user.password;
-        this.setState({updatedUser: updatedUser});
-
-    }*/
-
-    private linkToUpdatePage() {
-        <Link to="/update-user"></Link>
-    }
 
     private deleteUser(userId: number) {
         this.userService

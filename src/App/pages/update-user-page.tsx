@@ -3,9 +3,7 @@ import {User} from "../models/User";
 import {UserService} from "../services/UserService";
 import UpdateUserForm from "../components/UpdateUserForm";
 
-export default class UpdateUserPage extends React.Component<{}, {
-    loading: boolean,
-    updatedUser: User //This will be used to store user details when updating an existing user.
+export default class UpdateUserPage extends React.Component<{user: User}, {
 }> {
 
     public state = {
@@ -21,7 +19,7 @@ export default class UpdateUserPage extends React.Component<{}, {
                 <div className="title-banner">
                     <h3>Update User Form</h3>
                 </div>
-                <UpdateUserForm/>
+                <UpdateUserForm user={this.props.user}/>
                 </div>
 
         );

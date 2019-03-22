@@ -1,0 +1,21 @@
+nav {
+     background: #313131;
+      padding: 10px 15px 10px 15px;
+ }
+
+nav a {
+    padding: 10px 15px 10px 15px;
+
+}
+
+nav a:hover {
+    background-color: #3ABA44;
+    padding: 10px 15px 10px 15px;
+    color: white;
+}
+
+.active {
+    background-color: #3ABA44;
+    padding: 10px 15px 10px 15px;
+
+}

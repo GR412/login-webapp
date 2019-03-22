@@ -1,14 +1,17 @@
 import * as React from "react";
-import {Link} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
+import "./index.css";
+import HomePage from "../../pages/home-page";
+import AddUserPage from "../../pages/add-user-page";
 
 export default class Navigation extends React.Component {
 
     public render() {
         return (
-            <div className="navigation">
-                <Link to="/">Home page</Link>
-                <Link to="/add-user">Add user</Link>
-            </div>
+                <nav>
+                    <NavLink exact to="/" activeClassName="active">Home page</NavLink>
+                    <NavLink to="/add-user" activeClassName="active">Add user</NavLink>
+                </nav>
         );
     }
 

@@ -7,9 +7,10 @@ body {
   background: #414141;
 }
 
-p, h2, h3, ul, label {
+p, h2, h3, ul, label, a {
   font-family: 'Roboto', sans-serif;
   color: white;
+  text-decoration: none;
 }
 
 .wrapper {
@@ -17,7 +18,7 @@ p, h2, h3, ul, label {
   margin: auto;
 }
 
-.main {
+main {
   padding: 20px;
   background-color: white;
   margin-bottom: 20px;
@@ -33,6 +34,9 @@ p, h2, h3, ul, label {
   justify-content: flex-start;
   margin-left: 20px;
 }
+
+
+
 
 
 

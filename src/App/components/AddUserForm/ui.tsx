@@ -41,9 +41,9 @@ export default class AddUserForm extends React.Component<RouteComponentProps<any
 
     public render(): React.ReactNode {
         return (
-            <div className="main">
+            <main>
                 {this.renderAddUserForm()}
-            </div>
+            </main>
         );
     }
 
