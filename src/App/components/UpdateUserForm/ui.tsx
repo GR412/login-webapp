@@ -3,43 +3,46 @@ import "./index.css";
 import {UserService} from "../../services/UserService";
 import {User} from "../../models/User";
 import {Form, Button} from "semantic-ui-react";
-import {Link, RouteComponentProps} from "react-router-dom";
+import {RouteComponentProps} from 'react-router-dom';
 
 export default class UpdateUserForm extends React.Component<RouteComponentProps<any> & {
-
-    user: User
 
 }, {
     loading: boolean;
     updatedUser: User;
+    selectedUser: User;
 }> {
 
     private userService: UserService = new UserService();
 
     public state = {
         loading: false,
-        updatedUser: {id: 0, email: '', username: '', password: ''}
+        updatedUser: {id: 0, email: '', username: '', password: ''},
+        selectedUser: undefined
     };
 
-    /*public componentDidMount(): void {
+    public componentDidMount(): void {
         // set loading state
+        //console.log(this.props.match.params.userId);
+        console.log(this.props);
         this.setState({
             loading: true,
         });
 
         // load the data
         this.userService
-            .getAllUsers()
-            .subscribe((users: User[]) => {
-                this.onDataLoaded(users)
+            .getUser(this.props.match.params.userId)
+            .subscribe((user: User) => {
+                this.onDataLoaded(user)
             });
     }
 
-    public onDataLoaded(users: User[]) {
+    public onDataLoaded(user: User) {
         this.setState({
             loading: false,
+            selectedUser: user
         });
-    }*/
+    }
 
     public render(): React.ReactNode {
         return (
@@ -82,24 +85,25 @@ export default class UpdateUserForm extends React.Component<RouteComponentProps<
 
     private renderUpdateUserForm()
     {
+        //console.log(this.state.selectedUser);
         return (
             <Form>
                 <Form.Field>
                     <label>Username:</label>
                     <input placeholder='Username'
-                           //value={this.props.user.username}
+                           value={this.state.selectedUser ? this.state.selectedUser.username: ' '}
                            onChange={this.captureUpdatedUsername.bind(this)}/>
                 </Form.Field>
                 <Form.Field>
                     <label>Email:</label>
                     <input placeholder='Email'
-                           value={this.state.updatedUser.email}
+                           value={this.state.selectedUser ? this.state.selectedUser.email: ' '}
                            onChange={this.captureUpdatedEmail.bind(this)}/>
                 </Form.Field>
                 <Form.Field>
                     <label>Password:</label>
                     <input placeholder='Password'
-                           value={this.state.updatedUser.password}
+                           value={this.state.selectedUser ? this.state.selectedUser.password: ' '}
                            onChange={this.captureUpdatedPassword.bind(this)}/>
                 </Form.Field>
                 <Button className={`primary ui button ${this.state.loading ? 'loading' : ''}`}

@@ -19,7 +19,7 @@ export default class UpdateUserPage extends React.Component<{user: User}, {
                 <div className="title-banner">
                     <h3>Update User Form</h3>
                 </div>
-                <UpdateUserForm user={this.props.user}/>
+                <UpdateUserForm/>
                 </div>
 
         );

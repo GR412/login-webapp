@@ -3,7 +3,7 @@ import "./index.css";
 import {UserService} from "../../services/UserService";
 import {User} from "../../models/User";
 import {Form, Button} from "semantic-ui-react";
-import {RouteComponentProps} from 'react-router-dom'
+import {RouteComponentProps} from 'react-router-dom';
 
 export default class AddUserForm extends React.Component<RouteComponentProps<any> & {},
     {

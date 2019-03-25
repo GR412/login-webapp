@@ -4,7 +4,7 @@ import {UserService} from "../../services/UserService"; //Import the UserService
 import {User} from "../../models/User"; //Import the User object so it can be used in this component.
 import {Table} from "semantic-ui-react";
 import {Link} from "react-router-dom";
-import UpdateUserPage from "../../pages/update-user-page";
+import UpdateUserForm from "../UpdateUserForm/index";
 
 //The UsersTable class extends React.Component in order to be react component.
 export default class UsersTable extends React.Component<{}, {
@@ -113,8 +113,7 @@ export default class UsersTable extends React.Component<{}, {
                                         onClick={() => this.deleteUser(user.id)}>Delete
                                 </button>
                                 <Link to={`/update-user/${user.id}`}>
-                                    <button className={"ui orange button"} onClick={() => <UpdateUserPage user={user}/>}
-                                    >View More</button>
+                                    <button className={"ui orange button"}>View More</button>
                                 </Link>
                             </Table.Cell>
                         </Table.Row>
@@ -174,5 +173,4 @@ export default class UsersTable extends React.Component<{}, {
                     });
             });
     }
-
 }
