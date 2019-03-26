@@ -12,6 +12,8 @@ export class UserService {
             .map((response: AxiosResponse) => response.data);
     }
 
+    // TODO replace domain
+
     public getUser(userId: number): Observable<User> {
         return Observable
             .fromPromise(axios.get(`http://localhost:8080/users/${userId}`))

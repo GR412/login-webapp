@@ -10,23 +10,19 @@ export default class UpdateUserForm extends React.Component<RouteComponentProps<
 }, {
     loading: boolean;
     updatedUser: User;
-    selectedUser: User;
 }> {
 
     private userService: UserService = new UserService();
 
     public state = {
         loading: false,
-        updatedUser: {id: 0, email: '', username: '', password: ''},
-        selectedUser: undefined
+        updatedUser: {id: 0, email: '', username: '', password: ''}
     };
 
     public componentDidMount(): void {
         // set loading state
-        //console.log(this.props.match.params.userId);
-        console.log(this.props);
         this.setState({
-            loading: true,
+            loading: true
         });
 
         // load the data
@@ -40,14 +36,38 @@ export default class UpdateUserForm extends React.Component<RouteComponentProps<
     public onDataLoaded(user: User) {
         this.setState({
             loading: false,
-            selectedUser: user
+            updatedUser: user
         });
     }
 
     public render(): React.ReactNode {
         return (
             <main>
-                {this.renderUpdateUserForm()}
+                <Form>
+                    <Form.Field>
+                        <label>Username:</label>
+                        <input placeholder='Username'
+                               value={this.state.updatedUser.username}
+                               onChange={this.captureUpdatedUsername.bind(this)}/>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>Email:</label>
+                        <input placeholder='Email'
+                               value={this.state.updatedUser.email}
+                               onChange={this.captureUpdatedEmail.bind(this)}/>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>Password:</label>
+                        <input placeholder='Password'
+                               value={this.state.updatedUser.password}
+                               onChange={this.captureUpdatedPassword.bind(this)}/>
+                    </Form.Field>
+                    <Button className={`primary ui button`}
+                            type='submit'
+                            onClick={() => this.updateUser(this.state.updatedUser)}>
+                        Submit
+                    </Button>
+                </Form>
             </main>
         );
     }
@@ -83,55 +103,7 @@ export default class UpdateUserForm extends React.Component<RouteComponentProps<
         this.setState({updatedUser: updatedUser})
     }
 
-    private renderUpdateUserForm()
-    {
-        //console.log(this.state.selectedUser);
-        return (
-            <Form>
-                <Form.Field>
-                    <label>Username:</label>
-                    <input placeholder='Username'
-                           value={this.state.selectedUser ? this.state.selectedUser.username: ' '}
-                           onChange={this.captureUpdatedUsername.bind(this)}/>
-                </Form.Field>
-                <Form.Field>
-                    <label>Email:</label>
-                    <input placeholder='Email'
-                           value={this.state.selectedUser ? this.state.selectedUser.email: ' '}
-                           onChange={this.captureUpdatedEmail.bind(this)}/>
-                </Form.Field>
-                <Form.Field>
-                    <label>Password:</label>
-                    <input placeholder='Password'
-                           value={this.state.selectedUser ? this.state.selectedUser.password: ' '}
-                           onChange={this.captureUpdatedPassword.bind(this)}/>
-                </Form.Field>
-                <Button className={`primary ui button ${this.state.loading ? 'loading' : ''}`}
-                        type='submit'
-                        onClick={() => this.saveNewUser(this.state.updatedUser)}>
-                    Submit
-                </Button>
-            </Form>
-
-        );
-    }
-
-    private populateForm(user: User) {
-        const updatedUser = this.state.updatedUser; //Variable that is assigned to the current state of the updatedUser
-        updatedUser.id = user.id;
-        updatedUser.username = user.username;
-        updatedUser.email = user.email;
-        updatedUser.password = user.password;
-        this.setState({updatedUser: updatedUser});
-
-    }
-
-    /**
-     *
-     * @param userToAdd
-     */
-    private saveNewUser(userToAdd: User) {
-        // if already loading, then return - don't do anything
+    private updateUser(userToUpdate: User) {
         if (this.state.loading) {
             return;
         }
@@ -141,21 +113,16 @@ export default class UpdateUserForm extends React.Component<RouteComponentProps<
 
         // make http request
         this.userService
-            .addUser(this.state.updatedUser)
-            .subscribe((savedUser: User) => this.onUserSaved(savedUser));
-
+            .updateUser(userToUpdate)
+            .subscribe((savedUser: User) => this.onUserUpdated());
     }
 
-    /**
-     *
-     * @param savedUser
-     */
-    private onUserSaved(savedUser: User) {
+    private onUserUpdated() {
         this.setState({
             loading: false,
             updatedUser: {id: 0, username: '', password: '', email: ''}
         });
-        alert('User has been successfully saved.');
+        this.props.history.push('/');
     }
 
 }

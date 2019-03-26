@@ -6,11 +6,11 @@ import {BrowserRouter as Router, Route} from "react-router-dom";
 import UpdateUserPage from "./pages/update-user-page";
 import AddUserPage from "./pages/add-user-page";
 
-class App extends React.Component {
+export default class App extends React.Component {
+
     public render() {
         return (
             <div className="App">
-
                 <div className="Page-Content">
                     <Router>
                         <Header/>
@@ -22,6 +22,5 @@ class App extends React.Component {
             </div>
         );
     }
-}
 
-export default App;
+}

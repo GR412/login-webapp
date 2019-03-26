@@ -19,26 +19,6 @@ export default class AddUserForm extends React.Component<RouteComponentProps<any
 
     };
 
-    /*public componentDidMount(): void {
-        // set loading state
-        this.setState({
-            loading: true,
-        });
-
-        // load the data
-        this.userService
-            .getAllUsers()
-            .subscribe((users: User[]) => {
-                this.onDataLoaded(users)
-            });
-    }
-
-    public onDataLoaded(users: User[]) {
-        this.setState({
-            loading: false,
-        });
-    }*/
-
     public render(): React.ReactNode {
         return (
             <main>
@@ -148,9 +128,6 @@ export default class AddUserForm extends React.Component<RouteComponentProps<any
             newUser: {id: 0, username: '', password: '', email: ''}
         });
         this.props.history.push('/');
-        // this.props.match.userId
-        //alert('User has been successfully added.');
-        //return <Redirect to='/' />
     }
 
 }

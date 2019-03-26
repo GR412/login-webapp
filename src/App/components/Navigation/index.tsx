@@ -1,8 +1,6 @@
 import * as React from "react";
-import {Link, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import "./index.css";
-import HomePage from "../../pages/home-page";
-import AddUserPage from "../../pages/add-user-page";
 
 export default class Navigation extends React.Component {
 
