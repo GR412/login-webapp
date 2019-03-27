@@ -1,7 +1,7 @@
-import * as React from "react"; //Import the react framework.
+import * as React from "react";
 import "./index.css";
-import {UserService} from "../../services/UserService"; //Import the UserService class so it's methods can be accessed.
-import {User} from "../../models/User"; //Import the User object so it can be used in this component.
+import {UserService} from "../../services/UserService";
+import {User} from "../../models/User";
 import {Table} from "semantic-ui-react";
 import {Link} from "react-router-dom";
 
@@ -43,8 +43,6 @@ export default class UsersTable extends React.Component<{}, {
      *
      * A celled semantic-ui-react table is created which contains calls to two methods that render the header
      * and body of the table.
-     *
-     * Underneath a call to another method which renders a semantic-ui-react form is made.
      *
      * @return a semantic-ui-react table and form
      */
@@ -116,10 +114,9 @@ export default class UsersTable extends React.Component<{}, {
      * Method that populates the update user form with data captured from the users table when the modify button is
      * pressed.
      *
-     * @param userId is the supplied user data captured from the user table.
+     * @param userId is the supplied user id captured from the user table.
      *
-     * Each detail of the supplied user parameter (id, username, email and password) is assigned to the updatedUser
-     * variable. Then we assign the updatedUser state with the updatedUser variable which holds the supplied user data.
+     *
      */
 
     private deleteUser(userId: number) {
@@ -127,5 +124,4 @@ export default class UsersTable extends React.Component<{}, {
             .deleteUser(userId)
             .subscribe(() => this.reloadAllUsers());
     }
-
 }

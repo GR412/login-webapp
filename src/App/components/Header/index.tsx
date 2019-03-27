@@ -4,7 +4,6 @@ import Navigation from "../Navigation";
 
 export default class Header extends React.Component {
 
-
     public render(): React.ReactNode {
         return (
             <header>

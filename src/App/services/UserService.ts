@@ -4,11 +4,11 @@ import {Observable} from "rxjs";
 
 export class UserService {
 
-    private domain: string = 'http://localhost:8080';
+    private domain: string = 'http://localhost:8080/users/';
 
     public getAllUsers(): Observable<User[]> {
         return Observable
-            .fromPromise(axios.get(`${this.domain}/users`))
+            .fromPromise(axios.get(`${this.domain}`))
             .map((response: AxiosResponse) => response.data);
     }
 
@@ -16,26 +16,26 @@ export class UserService {
 
     public getUser(userId: number): Observable<User> {
         return Observable
-            .fromPromise(axios.get(`http://localhost:8080/users/${userId}`))
+            .fromPromise(axios.get(`${this.domain}${userId}`))
             .map((response: AxiosResponse) => response.data);
     }
 
     // method that calls delete endopoint
     public deleteUser(userId: number): Observable<User> {
         return Observable
-            .fromPromise(axios.delete(`http://localhost:8080/users/${userId}`))
+            .fromPromise(axios.delete(`${this.domain}${userId}`))
             .map((response: AxiosResponse) => response.data);
     }
 
     public addUser(user: User): Observable<User> {
         return Observable
-            .fromPromise(axios.post(`http://localhost:8080/users`, user))
+            .fromPromise(axios.post(`${this.domain}`, user))
             .map((response: AxiosResponse) => response.data);
     }
 
     public updateUser(user: User): Observable<User> {
         return Observable
-            .fromPromise(axios.post(`http://localhost:8080/users`, user))
+            .fromPromise(axios.post(`${this.domain}`, user))
             .map((response: AxiosResponse) => response.data);
     }
 
