@@ -7,7 +7,7 @@ export default class AddUserPage extends React.Component<{}, {}> {
 
     public render() {
         return (
-            <div className="wrapper">
+            <div className="form-wrapper">
                 <TitleBanner title="Add User Form"/>
                 <AddUserForm/>
             </div>

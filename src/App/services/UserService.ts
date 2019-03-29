@@ -1,10 +1,14 @@
 import axios, {AxiosResponse} from 'axios';
 import {User} from "../models/User";
+import {LoginRequest} from "../models/LoginRequest";
+import {LoginResponse} from "../models/LoginResponse";
 import {Observable} from "rxjs";
+
 
 export class UserService {
 
     private domain: string = 'http://localhost:8080/users/';
+    private authentication: string = 'http://localhost:8080/login';
 
     public getAllUsers(): Observable<User[]> {
         return Observable
@@ -36,6 +40,14 @@ export class UserService {
     public updateUser(user: User): Observable<User> {
         return Observable
             .fromPromise(axios.post(`${this.domain}`, user))
+            .map((response: AxiosResponse) => response.data);
+    }
+
+
+    public loginUser (login: LoginRequest): Observable<LoginResponse>
+    {
+        return Observable
+            .fromPromise(axios.post(`${this.authentication}`, login))
             .map((response: AxiosResponse) => response.data);
     }
 
