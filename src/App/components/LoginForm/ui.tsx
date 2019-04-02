@@ -2,30 +2,33 @@ import * as React from "react";
 import "./index.css";
 import {UserService} from "../../services/UserService";
 import {Form, Button} from "semantic-ui-react";
-import {RouteComponentProps} from 'react-router-dom';
 import {LoginRequest} from "../../models/LoginRequest";
 import {LoginResponse} from "../../models/LoginResponse";
 
-export default class LoginForm extends React.Component<RouteComponentProps<any> & {},
+export default class LoginForm extends React.Component<
+    { setLogginState: (status: boolean) => void; },
     {
         loading: boolean;
         isError: boolean;
         UserInput: LoginRequest;
-    }> {
+        errorMessage: String;
+    }>
+{
 
     private userService: UserService = new UserService();
 
     public state = {
         loading: false,
         UserInput: {id: 0, email: '', username: '', password: ''},
-        isError: false
+        isError: false,
+        errorMessage: " "
 
     };
 
     public render(): React.ReactNode {
         return (
             <main>
-                {this.state.isError? <div> Error message </div>: null}
+                {this.state.isError ? this.state.errorMessage : " "}
                 {this.renderLoginForm()}
             </main>
         );
@@ -83,23 +86,28 @@ export default class LoginForm extends React.Component<RouteComponentProps<any> 
     {
         this.userService.loginUser(userToAuthenticate)
             .subscribe((loginReponse: LoginResponse) => this.handleSuccessResponse(loginReponse),
-                (error:any) => this.handleErrorResponse()
+                (error:any) => this.handleErrorResponse(error)
             );
     }
 
-    private handleErrorResponse()
+    private handleErrorResponse(error: any)
     {
-        this.setState({isError: true});
-        console.log("ERROR - 500");
+
+        // updating local state
+        // this.setState({isError: true, errorMessage: error.response.data.message});
+        console.log(error.response);
+
+        // update state in main APP
+        this.props.setLogginState(false);
+
     }
 
     private handleSuccessResponse(loginResponse: LoginResponse)
     {
         this.setState({isError: false});
         localStorage.setItem("authToken", loginResponse.authToken);
-
-        console.log("Ok - 200");
-        this.props.history.push('/');
+        this.props.setLogginState(true);
+        // this.props.history.push('/');
 
     }
 
