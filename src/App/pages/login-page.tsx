@@ -7,20 +7,14 @@ import LoginForm from "../components/LoginForm";
  * route for navigation purposes.
  */
 
-export default class LoginPage extends React.Component<
-    {
-        /*Define props and their types*/
-        setLogginState : (status: boolean) => void; },
-    {}>
-{
+export default class LoginPage extends React.Component {
+
     /**
      * This is a special React method that renders the given components to the page.
      *
      * @return a div containing components to be displayed to the page.
      */
-
-    public render()
-    {
+    public render() {
         return (
             <div className="form-wrapper">
                 <h2>
@@ -28,8 +22,9 @@ export default class LoginPage extends React.Component<
                     Login WebApp
                 </h2>
                 <TitleBanner title="Login to view the homepage"/>
-                <LoginForm setLogginState={this.props.setLogginState}/>
+                <LoginForm/>
             </div>
         );
     }
+
 }

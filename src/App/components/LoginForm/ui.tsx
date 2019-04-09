@@ -4,16 +4,15 @@ import {UserService} from "../../services/UserService";
 import {Form, Button} from "semantic-ui-react";
 import {LoginRequest} from "../../models/LoginRequest";
 import {LoginResponse} from "../../models/LoginResponse";
+import {RouteComponentProps} from "react-router";
 
-export default class LoginForm extends React.Component<
-    { setLogginState: (status: boolean) => void; },
+export default class LoginForm extends React.Component<{},
     {
         loading: boolean;
         isError: boolean;
         UserInput: LoginRequest;
         errorMessage: String;
-    }>
-{
+    }> {
 
     private userService: UserService = new UserService();
 
@@ -49,7 +48,7 @@ export default class LoginForm extends React.Component<
                            value={this.state.UserInput.password}
                            onChange={this.capturePasswordInput.bind(this)}/>
                 </Form.Field>
-                <Button className={`primary ui button ${this.state.loading ? 'loading' : ''}`}
+                <Button className={`primary ui button `}
                         type='submit'
                         onClick={() => this.authenticate(this.state.UserInput)}>
                     Submit
@@ -79,38 +78,22 @@ export default class LoginForm extends React.Component<
 
     /**
      *
-     * @param userToAdd
+     * @param userToAuthenticate
      */
-
-    private authenticate (userToAuthenticate: LoginRequest)
-    {
-        this.userService.loginUser(userToAuthenticate)
-            .subscribe((loginReponse: LoginResponse) => this.handleSuccessResponse(loginReponse),
-                (error:any) => this.handleErrorResponse(error)
+    private authenticate(userToAuthenticate: LoginRequest) {
+        this.userService
+            .loginUser(userToAuthenticate)
+            .subscribe((loginReponse: LoginResponse) => {
+                    this.setState({isError: false});
+                },
+                (error: any) => {
+                    console.log(error.response);
+                    this.setState({isError: true});
+                }
             );
+
+        //this.props.history.push('/');
     }
-
-    private handleErrorResponse(error: any)
-    {
-
-        // updating local state
-        // this.setState({isError: true, errorMessage: error.response.data.message});
-        console.log(error.response);
-
-        // update state in main APP
-        this.props.setLogginState(false);
-
-    }
-
-    private handleSuccessResponse(loginResponse: LoginResponse)
-    {
-        this.setState({isError: false});
-        localStorage.setItem("authToken", loginResponse.authToken);
-        this.props.setLogginState(true);
-        // this.props.history.push('/');
-
-    }
-
 
     /*private saveNewUser(userToAdd: User) {
         // if already loading, then return - don't do anything
