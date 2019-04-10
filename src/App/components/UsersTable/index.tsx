@@ -46,14 +46,14 @@ export default class UsersTable extends React.Component<{}, {
      *
      * @return a semantic-ui-react table and form
      */
-    public render(): React.ReactNode {
+    public render() {
         return (
-            <div className="main">
+            <main>
                 <Table celled>
                     {this.renderTableHeader()}
                     {this.renderTableBody()}
                 </Table>
-            </div>
+            </main>
         );
     }
 

@@ -40,7 +40,7 @@ export default class UpdateUserForm extends React.Component<RouteComponentProps<
         });
     }
 
-    public render(): React.ReactNode {
+    public render() {
         return (
             <main>
                 <Form>

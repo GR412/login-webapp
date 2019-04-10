@@ -6,7 +6,7 @@ export default class TitleBanner extends React.Component<{
 }> {
 
 
-    public render(): React.ReactNode {
+    public render() {
         return (
             <div className="title-banner">
                 <h3>{this.props.title}</h3>

@@ -4,7 +4,6 @@ import {UserService} from "../../services/UserService";
 import {Form, Button} from "semantic-ui-react";
 import {LoginRequest} from "../../models/LoginRequest";
 import {LoginResponse} from "../../models/LoginResponse";
-import {RouteComponentProps} from "react-router";
 
 export default class LoginForm extends React.Component<{},
     {
@@ -24,7 +23,7 @@ export default class LoginForm extends React.Component<{},
 
     };
 
-    public render(): React.ReactNode {
+    public render() {
         return (
             <main>
                 {this.state.isError ? this.state.errorMessage : " "}

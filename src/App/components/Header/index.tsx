@@ -15,7 +15,7 @@ export default class Header extends React.Component
      * @return a header html tag containing the title and icon. A navigation component is also rendered in the header.
      */
 
-    public render(): React.ReactNode
+    public render()
     {
         return (
             <header>
