@@ -1,0 +1,10 @@
+.headerWithoutNav {
+    background-color: #303030;
+    padding:20px 20px 0px 20px;
+    border-bottom: 3px solid #3ABA44;
+    height: 65px;
+}
+.headerWithoutNav h2 {
+    position: absolute;
+    top: 13.5px;
+}

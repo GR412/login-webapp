@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Header from "./components/Header";
+import HeaderWithoutNav from "./components/HeaderWithoutNav";
 import './App.css';
 import HomePage from "./pages/home-page";
 import {BrowserRouter as Router, Route} from "react-router-dom";
@@ -12,9 +13,23 @@ import {ApiClient} from "./services/ApiClient";
  * This is the main App component that renders all of the different components to form a single page. There is also
  * logic to ensure that a user is restricted to the pages they can view depending on if they're authenticated or not.
  */
-export default class App extends React.Component {
+export default class App extends React.Component<{},
+    { isUserLoggedIn: boolean }> {
 
     private apiClient: ApiClient = new ApiClient(); //Reference to the apiClient class so it's methods can be accessed.
+
+    /**
+     *
+     * @param props
+     */
+    constructor(props: any) {
+        super(props);
+        this.apiClient.addLoginStateListener((isLoggedIn: boolean) => this.setState({isUserLoggedIn: isLoggedIn}));
+    }
+
+    public state = {
+        isUserLoggedIn: this.apiClient.isUserLoggedIn()
+    };
 
     /**
      * This is a special React method that renders the given components to the page. Since this is within the main app
@@ -26,7 +41,7 @@ export default class App extends React.Component {
     public render() {
         return (
             <div className="App">
-                {this.apiClient.isUserLoggedIn() ? this.renderMainApp() : this.renderLoginPage()}
+                {this.state.isUserLoggedIn ? this.renderMainApp() : this.renderLoginPage()}
             </div>
         );
     }
@@ -61,7 +76,7 @@ export default class App extends React.Component {
     public renderLoginPage() {
         return (
             <div>
-
+                <HeaderWithoutNav/>
                 <LoginPage/>
             </div>
         )

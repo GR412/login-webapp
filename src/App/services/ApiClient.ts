@@ -3,10 +3,15 @@ import {Observable} from "rxjs";
 
 export class ApiClient {
 
+    private static readonly ON_LOGIN_LISTENERS: ((isLoggedIn: boolean) => void)[] = [];
     private apiHost: string = "http://localhost:8080";
 
-    public isUserLoggedIn() {
-        return !!localStorage.getItem("X-Auth-Token");
+    public addLoginStateListener(listener: (isLoggedIn) => void) {
+        ApiClient.ON_LOGIN_LISTENERS.push(listener);
+    }
+
+    public isUserLoggedIn(): boolean {
+        return !!localStorage.getItem('X-Auth-Token');
     }
 
     public get(path: string): Observable<any> {
@@ -19,7 +24,7 @@ export class ApiClient {
         return Observable
             .fromPromise(axios.post(this.apiHost + path, payload))
             .map((response: AxiosResponse) => response.data)
-            .do((response: any) => this.saveToken(response.authToken));
+            .do((response: any) => this.onLoginSuccess(response.authToken));
     }
 
     public post(path: string, payload: any): Observable<any> {
@@ -44,7 +49,8 @@ export class ApiClient {
         return {headers: {'X-Auth-Token': localStorage.getItem('auth-token')}};
     }
 
-    private saveToken(authToken: string) {
+    private onLoginSuccess(authToken: string) {
         localStorage.setItem('X-Auth-Token', authToken);
+        ApiClient.ON_LOGIN_LISTENERS.forEach(listener => listener(true));
     }
 }
